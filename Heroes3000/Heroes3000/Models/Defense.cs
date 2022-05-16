@@ -8,9 +8,9 @@ namespace Heroes3000.Models
 		public ActionTypes Type { get; private set; }
 		public int DefenseCooldown { get; private set; }
 
-		public Defense(string attackName, ActionTypes type, int defenseCooldown)
+		public Defense(string defenseName, ActionTypes type, int defenseCooldown)
 		{
-			this.DefenseName = attackName;
+			this.DefenseName = defenseName;
 			this.Type = type;
 			this.DefenseCooldown = defenseCooldown;
 		}

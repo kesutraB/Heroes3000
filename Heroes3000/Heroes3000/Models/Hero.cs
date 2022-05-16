@@ -7,25 +7,31 @@ namespace Heroes3000.Models
 	public class Hero
 	{
 
-		private const int MinDelay = 1500;
-		private const int MaxDelay = 5000;
+		private const int MinDelay = 150;
+		private const int MaxDelay = 500;
 		private const int CriticalHitChance = 2;
+		private const int MinDefenseChance = 10;
+		private const int MaxDefenseChance = 80;
 		public string FighterName { get; private set; }
 		public FighterClass Class { get; private set; } = FighterClass.None;
 		public FighterHealthState HealthState { get; private set; } = FighterHealthState.None;
 		public Attack PhysicalAttack { get; private set; }
 		public Attack MagicalAttack { get; private set; }
+		public Defense PhysicalDefense { get; private set; }
+		public Defense MagicalDefense { get; private set; }
 		public int CurrentHP { get; private set; }
 		public int MaxHP { get; private set; }
 
-		public Hero (string fighterName, FighterClass fighterClass, int maxHP, Attack physicalAttack, Attack magicalAttack)
+		public Hero (string fighterName, FighterClass fighterClass, int maxHp, Attack physicalAttack, Attack magicalAttack, Defense physicalDefense, Defense magicalDefense)
 		{
 			this.FighterName = fighterName;
 			this.Class = fighterClass;
-			this.MaxHP = maxHP;
-			this.CurrentHP = maxHP;
+			this.MaxHP = maxHp;
+			this.CurrentHP = maxHp;
 			this.PhysicalAttack = physicalAttack;
 			this.MagicalAttack = magicalAttack;
+			this.PhysicalDefense = physicalDefense;
+			this.MagicalDefense = magicalDefense;
 		}
 
 		public void Match (Hero fighter)
@@ -67,11 +73,11 @@ namespace Heroes3000.Models
 
 		#region Printing
 
-		private void PrintFighterStatus(Hero fighter1, Hero fighter2)
+		private void PrintFighterStatus(Hero attacker, Hero defender)
 		{
 			Console.ForegroundColor = ConsoleColor.Blue;
-			Console.WriteLine($"{fighter1.FighterName} now has {fighter1.CurrentHP} / {fighter1.MaxHP} HP left.");
-			Console.WriteLine($"{fighter2.FighterName} now has {fighter2.CurrentHP} / {fighter2.MaxHP} HP left.");
+			Console.WriteLine($"{attacker.FighterName} now has {attacker.CurrentHP} / {attacker.MaxHP} HP left.");
+			Console.WriteLine($"{defender.FighterName} now has {defender.CurrentHP} / {defender.MaxHP} HP left.");
 			Console.ResetColor();
 		}
 		private void VictoryMessage (Hero fighter)
@@ -86,19 +92,24 @@ namespace Heroes3000.Models
 			Console.Write($"\n{fighter.FighterName} died!\n");
 			Console.ResetColor();
 		}
-		private void AttackMessage(Hero fighter1, Hero fighter2, Attack attack)
+		private void AttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
-			Console.WriteLine($"{fighter1.FighterName} attacked {fighter2.FighterName} with {attack.AttackName} and decreased {fighter2.FighterName}'s HP by {attack.AttackDamage}.");
+			Console.WriteLine($"{attacker.FighterName} attacked {defender.FighterName} with {attack.AttackName} and decreased {defender.FighterName}'s HP by {attack.AttackDamage}.");
 			Console.ResetColor();
 		}
-		private void CriticalAttackMessage(Hero fighter1, Hero fighter2, Attack attack)
+		private void CriticalAttackMessage(Hero attacker, Hero fighter2, Attack attack)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkRed;
-			Console.WriteLine($"{fighter1.FighterName} scored a critical hit!");
+			Console.WriteLine($"{attacker.FighterName} scored a critical hit!");
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
-			Console.WriteLine($"{fighter1.FighterName} attacked {fighter2.FighterName} with {attack.AttackName} and decreased {fighter2.FighterName}'s HP by {attack.AttackDamage*3}.");
+			Console.WriteLine($"{attacker.FighterName} attacked {fighter2.FighterName} with {attack.AttackName} and decreased {fighter2.FighterName}'s HP by {attack.AttackDamage*3}.");
 			Console.ResetColor();
+		}
+		private void DefenseMessage(Hero attacker, Hero defender, Defense defense)
+		{
+			Console.ForegroundColor = ConsoleColor.DarkGreen;
+			Console.WriteLine($"{defender.FighterName} protected himself by using {defense.DefenseName} and returned {attacker.FighterName} 35 % of damage.");
 		}
 		#endregion
 
@@ -126,6 +137,26 @@ namespace Heroes3000.Models
 				attack = this.MagicalAttack;
 
 			return attack;
+		}
+		#endregion
+
+		#region Defending
+
+		private bool MaybeDefendYourself(Random rnd)
+		{
+			if (GetChance(rnd) >= MinDefenseChance && GetChance(rnd) <= MaxDefenseChance)
+				return true;
+			return false;
+		}
+		private Defense ReturnDefense(Random rnd)
+		{
+			Defense defense = new Defense("", ActionTypes.None, 0);
+			if (ImFeelingLucky(rnd, 50))
+				defense = this.PhysicalDefense;
+			else
+				defense = this.MagicalDefense;
+
+			return defense;
 		}
 		#endregion
 
