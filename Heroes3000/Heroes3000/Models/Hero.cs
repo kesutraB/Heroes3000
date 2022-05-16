@@ -30,20 +30,6 @@ namespace Heroes3000.Models
 
 		public void Match (Hero fighter)
 		{
-			if (IsHeroDead(fighter))
-			{
-				DeathMessage(fighter);
-				VictoryMessage(this);
-				return;
-			}
-			if (IsHeroDead(this))
-			{
-				Console.ResetColor();
-				DeathMessage(this);
-				VictoryMessage(fighter);
-				return;
-			}
-
 			PrintFighterStatus(this, fighter);
 
 			Random rnd = new Random(Convert.ToInt32(DateTime.Now.Second));
@@ -61,6 +47,20 @@ namespace Heroes3000.Models
 				KillFighter(fighter);
 			if(MaybeKillFighter(this))
 				KillFighter(this);
+
+			if (IsHeroDead(fighter))
+			{
+				DeathMessage(fighter);
+				VictoryMessage(this);
+				return;
+			}
+			else if (IsHeroDead(this))
+			{
+				Console.ResetColor();
+				DeathMessage(this);
+				VictoryMessage(fighter);
+				return;
+			}
 
 			Thread.Sleep(rnd.Next(MinDelay, MaxDelay));
 		}
