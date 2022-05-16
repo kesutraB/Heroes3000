@@ -10,8 +10,7 @@ namespace Heroes3000.Models
 		private const int MinDelay = 150;
 		private const int MaxDelay = 500;
 		private const int CriticalHitChance = 2;
-		private const int MinDefenseChance = 10;
-		private const int MaxDefenseChance = 80;
+		private const int DefenseChance = 30;
 		public string FighterName { get; private set; }
 		public FighterClass Class { get; private set; } = FighterClass.None;
 		public FighterHealthState HealthState { get; private set; } = FighterHealthState.None;
@@ -41,10 +40,24 @@ namespace Heroes3000.Models
 			Random rnd = new Random(Convert.ToInt32(DateTime.Now.Second));
 
 			Attack attack = ReturnAttack(rnd);
+			Defense defense = ReturnDefense(rnd);
 
 			DealDamage(fighter, attack, rnd);
 
-			if(MaybeCriticalHit(rnd))
+			if (MaybeDefendYourself(rnd))
+			{
+				if (MaybeCriticalHit(rnd))
+				{
+					CriticalAttackMessage(this, fighter, attack);
+					DefenseMessage(fighter, defense);
+				}
+				else
+				{
+					AttackMessage(this, fighter, attack);
+					DefenseMessage(fighter, defense);
+				}
+			}
+			else if(MaybeCriticalHit(rnd))
 				CriticalAttackMessage(this, fighter, attack);
 			else
 				AttackMessage(this, fighter, attack);
@@ -60,7 +73,7 @@ namespace Heroes3000.Models
 				VictoryMessage(this);
 				return;
 			}
-			else if (IsHeroDead(this))
+			if (IsHeroDead(this))
 			{
 				Console.ResetColor();
 				DeathMessage(this);
@@ -71,9 +84,11 @@ namespace Heroes3000.Models
 			Thread.Sleep(rnd.Next(MinDelay, MaxDelay));
 		}
 
+		
+
 		#region Printing
 
-		private void PrintFighterStatus(Hero attacker, Hero defender)
+		private static void PrintFighterStatus(Hero attacker, Hero defender)
 		{
 			Console.ForegroundColor = ConsoleColor.Cyan;
 			Console.Write($"{attacker.FighterName} ");
@@ -85,10 +100,10 @@ namespace Heroes3000.Models
 			Console.WriteLine($"now has {defender.CurrentHP} / {defender.MaxHP} HP left.");
 			Console.ResetColor();
 		}
-		private void VictoryMessage (Hero fighter)
+		private static void VictoryMessage (Hero fighter)
 		{
 			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.Write($"\n\n{fighter.FighterName} won!\n");
+			Console.Write($"{fighter.FighterName} won!\n\n");
 			Console.ResetColor();
 		}
 		private static void DeathMessage (Hero fighter)
@@ -97,13 +112,13 @@ namespace Heroes3000.Models
 			Console.Write($"\n{fighter.FighterName} died!\n");
 			Console.ResetColor();
 		}
-		private void AttackMessage(Hero attacker, Hero defender, Attack attack)
+		private static void AttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
 			Console.WriteLine($"{attacker.FighterName} attacked {defender.FighterName} with {attack.AttackName} and decreased {defender.FighterName}'s HP by {attack.AttackDamage}.\n");
 			Console.ResetColor();
 		}
-		private void CriticalAttackMessage(Hero attacker, Hero defender, Attack attack)
+		private static void CriticalAttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkRed;
 			Console.WriteLine($"{attacker.FighterName} scored a critical hit!");
@@ -111,25 +126,27 @@ namespace Heroes3000.Models
 			Console.WriteLine($"{attacker.FighterName} attacked {defender.FighterName} with {attack.AttackName} and decreased {defender.FighterName}'s HP by {attack.AttackDamage*3}.\n");
 			Console.ResetColor();
 		}
-		private void DefenseMessage(Hero attacker, Hero defender, Defense defense)
+		private static void DefenseMessage(Hero defender, Defense defense)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
-			Console.WriteLine($"{defender.FighterName} protected himself by using {defense.DefenseName} and returned {attacker.FighterName} 35 % of damage.");
+			Console.WriteLine($"{defender.FighterName} protected himself by using {defense.DefenseName} and got 35 % less damage.\n");
 		}
 		#endregion
 
 		#region Attacking
 
-		private bool MaybeCriticalHit(Random rnd)
+		private static bool MaybeCriticalHit(Random rnd)
 		{
 			if (ImFeelingLucky(rnd, CriticalHitChance))
 				return true;
 			return false;
 		}
-		private void DealDamage(Hero fighter, Attack attack, Random rnd)
+		private static void DealDamage(Hero fighter, Attack attack, Random rnd)
 		{
 			if (MaybeCriticalHit(rnd))
 				fighter.CurrentHP -= attack.AttackDamage * 3;
+			else if (MaybeDefendYourself(rnd))
+				fighter.CurrentHP -= (int)Math.Round(attack.AttackDamage * .35);
 			else
 				fighter.CurrentHP -= attack.AttackDamage;
 		}
@@ -147,9 +164,9 @@ namespace Heroes3000.Models
 
 		#region Defending
 
-		private bool MaybeDefendYourself(Random rnd)
+		private static bool MaybeDefendYourself(Random rnd)
 		{
-			if (GetChance(rnd) >= MinDefenseChance && GetChance(rnd) <= MaxDefenseChance)
+			if (ImFeelingLucky(rnd, DefenseChance))
 				return true;
 			return false;
 		}
@@ -167,19 +184,19 @@ namespace Heroes3000.Models
 
 		#region Helpers
 
-		private void KillFighter(Hero fighter)
+		private static void KillFighter(Hero fighter)
 		{
 			fighter.CurrentHP = 0;
 			fighter.HealthState = FighterHealthState.Dead;
 		}
-		private bool MaybeKillFighter(Hero fighter)
+		private static bool MaybeKillFighter(Hero fighter)
 		{
 			if (fighter.CurrentHP <= 0)
 				return true;
 
 			return false;
 		}
-		private bool IsHeroDead (Hero fighter)
+		private static bool IsHeroDead (Hero fighter)
 		{
 			if (fighter.HealthState == FighterHealthState.Dead)
 				return true;
