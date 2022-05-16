@@ -75,9 +75,14 @@ namespace Heroes3000.Models
 
 		private void PrintFighterStatus(Hero attacker, Hero defender)
 		{
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.Write($"{attacker.FighterName} ");
 			Console.ForegroundColor = ConsoleColor.Blue;
-			Console.WriteLine($"{attacker.FighterName} now has {attacker.CurrentHP} / {attacker.MaxHP} HP left.");
-			Console.WriteLine($"{defender.FighterName} now has {defender.CurrentHP} / {defender.MaxHP} HP left.");
+			Console.WriteLine($"now has {attacker.CurrentHP} / {attacker.MaxHP} HP left.");
+			Console.ForegroundColor = ConsoleColor.DarkMagenta;
+			Console.Write($"{defender.FighterName} ");
+			Console.ForegroundColor = ConsoleColor.Blue;
+			Console.WriteLine($"now has {defender.CurrentHP} / {defender.MaxHP} HP left.");
 			Console.ResetColor();
 		}
 		private void VictoryMessage (Hero fighter)
@@ -95,15 +100,15 @@ namespace Heroes3000.Models
 		private void AttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
-			Console.WriteLine($"{attacker.FighterName} attacked {defender.FighterName} with {attack.AttackName} and decreased {defender.FighterName}'s HP by {attack.AttackDamage}.");
+			Console.WriteLine($"{attacker.FighterName} attacked {defender.FighterName} with {attack.AttackName} and decreased {defender.FighterName}'s HP by {attack.AttackDamage}.\n");
 			Console.ResetColor();
 		}
-		private void CriticalAttackMessage(Hero attacker, Hero fighter2, Attack attack)
+		private void CriticalAttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkRed;
 			Console.WriteLine($"{attacker.FighterName} scored a critical hit!");
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
-			Console.WriteLine($"{attacker.FighterName} attacked {fighter2.FighterName} with {attack.AttackName} and decreased {fighter2.FighterName}'s HP by {attack.AttackDamage*3}.");
+			Console.WriteLine($"{attacker.FighterName} attacked {defender.FighterName} with {attack.AttackName} and decreased {defender.FighterName}'s HP by {attack.AttackDamage*3}.\n");
 			Console.ResetColor();
 		}
 		private void DefenseMessage(Hero attacker, Hero defender, Defense defense)

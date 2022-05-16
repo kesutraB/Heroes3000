@@ -46,11 +46,22 @@ namespace Heroes3000
 				defender = PickAFighter(rnd, fighters);
 			}
 
+			PrintOpponents(fighters, attacker, defender);
+
 			while (!(fighters[attacker].HealthState == FighterHealthState.Dead || fighters[defender].HealthState == FighterHealthState.Dead))
 			{
 				fighters[attacker].Match(fighters[defender]);
 				fighters[defender].Match(fighters[attacker]);
 			}
+		}
+		private static void PrintOpponents(List<Hero> fighters, int attacker, int defender)
+		{
+			Console.Write($"{fighters[attacker].FighterName} (attacker) vs {fighters[defender].FighterName} (defender)\n");
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.Write("attacking\t");
+			Console.ForegroundColor = ConsoleColor.DarkMagenta;
+			Console.Write("defending\n\n");
+			Console.ResetColor();
 		}
 		private static int PickAFighter(Random rnd, List<Hero> fighters)
 		{
