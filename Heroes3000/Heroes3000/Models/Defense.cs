@@ -1,15 +1,14 @@
+using Heroes3000.Constants;
+
 namespace Heroes3000.Models
 {
 	public class Defense
 	{
-		public enum DefenseType
-		{ None, Physical, Magical }
-
 		public string DefenseName { get; private set; }
-		public DefenseType Type { get; private set; }
+		public ActionTypes Type { get; private set; }
 		public int DefenseCooldown { get; private set; }
 
-		public Defense(string attackName, DefenseType type, int defenseCooldown)
+		public Defense(string attackName, ActionTypes type, int defenseCooldown)
 		{
 			this.DefenseName = attackName;
 			this.Type = type;

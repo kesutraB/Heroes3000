@@ -13,13 +13,13 @@ namespace Heroes3000
 			List<Attack> magicalAttacks = new List<Attack>();
 			List<Hero> fighters = new List<Hero>();
 
-			physicalAttacks.Add(new Attack("Right Hook", Attack.AttackType.Physical, 10, 1000));
-			physicalAttacks.Add(new Attack("Kick In The Nuts", Attack.AttackType.Physical, 20, 1000));
-			physicalAttacks.Add(new Attack("Punch In The Guts", Attack.AttackType.Physical, 50, 1000));
+			physicalAttacks.Add(new Attack("Right Hook", ActionTypes.Physical, 10, 1000));
+			physicalAttacks.Add(new Attack("Kick In The Nuts", ActionTypes.Physical, 20, 1000));
+			physicalAttacks.Add(new Attack("Punch In The Guts", ActionTypes.Physical, 50, 1000));
 
-			magicalAttacks.Add(new Attack("Lightning Strike", Attack.AttackType.Magical, 20, 2000));
-			magicalAttacks.Add(new Attack("Fireball", Attack.AttackType.Magical, 30, 2000));
-			magicalAttacks.Add(new Attack("Meteor Shower", Attack.AttackType.Magical, 60, 2000));
+			magicalAttacks.Add(new Attack("Lightning Strike", ActionTypes.Magical, 20, 2000));
+			magicalAttacks.Add(new Attack("Fireball", ActionTypes.Magical, 30, 2000));
+			magicalAttacks.Add(new Attack("Meteor Shower", ActionTypes.Magical, 60, 2000));
 
 			fighters.Add(new Hero("Mirek", FighterClass.Fighter, 100, physicalAttacks[0], magicalAttacks[0]));
 			fighters.Add(new Hero("Eidam", FighterClass.Wizard, 120, physicalAttacks[1], magicalAttacks[1]));

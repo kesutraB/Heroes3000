@@ -106,7 +106,7 @@ namespace Heroes3000.Models
 
 		private bool MaybeCriticalHit(Random rnd)
 		{
-			if (rnd.Next(1, 100) <= CriticalHitChance)
+			if (ImFeelingLucky(rnd, CriticalHitChance))
 				return true;
 			return false;
 		}
@@ -119,8 +119,8 @@ namespace Heroes3000.Models
 		}
 		private Attack ReturnAttack(Random rnd)
 		{
-			Attack attack = new Attack("", Attack.AttackType.None, 0, 0);
-			if (rnd.Next(1, 100) <= 50)
+			Attack attack = new Attack("", ActionTypes.None, 0, 0);
+			if (ImFeelingLucky(rnd, 50))
 				attack = this.PhysicalAttack;
 			else
 				attack = this.MagicalAttack;
@@ -149,6 +149,14 @@ namespace Heroes3000.Models
 				return true;
 
 			return false;
+		}
+		private static bool ImFeelingLucky(Random rnd, int luckyValue)
+		{
+			return GetChance(rnd) <= luckyValue;
+		}
+		private static int GetChance(Random rnd)
+		{
+			return rnd.Next(0, 100);
 		}
 		#endregion
 	}
