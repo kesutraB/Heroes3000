@@ -175,7 +175,7 @@ namespace Heroes3000.Models
 			if (MaybeCriticalHit(rnd))
 				fighter.CurrentHp -= attack.AttackDamage * 3;
 			else if (MaybeDefendYourself(rnd))
-				fighter.CurrentHp -= (int)Math.Round(attack.AttackDamage * .35);
+				fighter.CurrentHp -= (int)Math.Round(attack.AttackDamage * .65);
 			else
 				fighter.CurrentHp -= attack.AttackDamage;
 		}
