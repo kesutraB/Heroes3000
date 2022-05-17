@@ -11,6 +11,8 @@ namespace Heroes3000.Models
 		private const int MaxDelay = 500;
 		private const int CriticalHitChance = 2;
 		private const int DefenseChance = 30;
+		private const string Blue = "ConsoleColor.Blue";
+		private const string DarkYellow = "ConsoleColor.DarkYellow";
 		public string FighterName { get; private set; }
 		public FighterClass Class { get; private set; } = FighterClass.None;
 		public FighterHealthState HealthState { get; private set; } = FighterHealthState.None;
@@ -50,17 +52,25 @@ namespace Heroes3000.Models
 				{
 					CriticalAttackMessage(this, fighter, attack);
 					DefenseMessage(fighter, defense);
+					Console.WriteLine();
 				}
 				else
 				{
 					AttackMessage(this, fighter, attack);
 					DefenseMessage(fighter, defense);
+					Console.WriteLine();
 				}
 			}
-			else if(MaybeCriticalHit(rnd))
+			else if (MaybeCriticalHit(rnd))
+			{
 				CriticalAttackMessage(this, fighter, attack);
+				Console.WriteLine();
+			}
 			else
+			{
 				AttackMessage(this, fighter, attack);
+				Console.WriteLine();
+			}
 
 			if (MaybeKillFighter(fighter))
 				KillFighter(fighter);
@@ -90,14 +100,12 @@ namespace Heroes3000.Models
 
 		private static void PrintFighterStatus(Hero attacker, Hero defender)
 		{
-			Console.ForegroundColor = ConsoleColor.Cyan;
-			Console.Write($"{attacker.FighterName} ");
+			PrintAttackerName(attacker);
 			Console.ForegroundColor = ConsoleColor.Blue;
-			Console.WriteLine($"now has {attacker.CurrentHP} / {attacker.MaxHP} HP left.");
-			Console.ForegroundColor = ConsoleColor.DarkMagenta;
-			Console.Write($"{defender.FighterName} ");
+			Console.WriteLine($" now has {attacker.CurrentHP} / {attacker.MaxHP} HP left.");
+			PrintDefenderName(defender);
 			Console.ForegroundColor = ConsoleColor.Blue;
-			Console.WriteLine($"now has {defender.CurrentHP} / {defender.MaxHP} HP left.");
+			Console.WriteLine($" now has {defender.CurrentHP} / {defender.MaxHP} HP left.");
 			Console.ResetColor();
 		}
 		private static void VictoryMessage (Hero fighter)
@@ -114,22 +122,42 @@ namespace Heroes3000.Models
 		}
 		private static void AttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
+			PrintAttackerName(attacker);
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
-			Console.WriteLine($"{attacker.FighterName} attacked {defender.FighterName} with {attack.AttackName} and decreased {defender.FighterName}'s HP by {attack.AttackDamage}.\n");
+			Console.Write(" attacked ");
+			PrintDefenderName(defender);
+			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.Write($" with { attack.AttackName} and decreased his HP by {attack.AttackDamage}.\n");
 			Console.ResetColor();
 		}
 		private static void CriticalAttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkRed;
-			Console.WriteLine($"{attacker.FighterName} scored a critical hit!");
+			Console.Write($"{attacker.FighterName} scored a critical hit!");
+			PrintAttackerName(attacker);
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
-			Console.WriteLine($"{attacker.FighterName} attacked {defender.FighterName} with {attack.AttackName} and decreased {defender.FighterName}'s HP by {attack.AttackDamage*3}.\n");
+			Console.Write(" attacked ");
+			PrintDefenderName(defender);
+			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.Write($" with { attack.AttackName} and decreased his HP by {attack.AttackDamage * 3}.\n");
 			Console.ResetColor();
 		}
 		private static void DefenseMessage(Hero defender, Defense defense)
 		{
+			PrintDefenderName(defender);
 			Console.ForegroundColor = ConsoleColor.DarkGreen;
-			Console.WriteLine($"{defender.FighterName} protected himself by using {defense.DefenseName} and got 35 % less damage.\n");
+			Console.Write($" protected himself by using {defense.DefenseName} and got 35 % less damage.\n");
+			Console.ResetColor();
+		}
+		private static void PrintAttackerName(Hero attacker)
+		{
+			Console.ForegroundColor = ConsoleColor.Cyan;
+			Console.Write(attacker.FighterName);
+		}
+		private static void PrintDefenderName(Hero defender)
+		{
+			Console.ForegroundColor = ConsoleColor.DarkMagenta;
+			Console.Write(defender.FighterName);
 		}
 		#endregion
 

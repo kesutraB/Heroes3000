@@ -56,11 +56,11 @@ namespace Heroes3000
 		}
 		private static void PrintOpponents(List<Hero> fighters, int attacker, int defender)
 		{
-			Console.Write($"{fighters[attacker].FighterName} (attacker) vs {fighters[defender].FighterName} (defender)\n");
+			Console.Write($"{fighters[attacker].FighterName} vs {fighters[defender].FighterName}\n\n");
 			Console.ForegroundColor = ConsoleColor.Cyan;
-			Console.Write("attacking\t");
+			Console.Write("currently attacking\n");
 			Console.ForegroundColor = ConsoleColor.DarkMagenta;
-			Console.Write("defending\n\n");
+			Console.Write("currently defending\n\n");
 			Console.ResetColor();
 		}
 		private static int PickAFighter(Random rnd, List<Hero> fighters)
