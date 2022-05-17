@@ -9,6 +9,7 @@ namespace Heroes3000
 	{
 		static void Main(string[] args)
 		{
+
 			List<Attack> physicalAttacks = new List<Attack>();
 			List<Attack> magicalAttacks = new List<Attack>();
 			List<Defense> physicalDefenses = new List<Defense>();
