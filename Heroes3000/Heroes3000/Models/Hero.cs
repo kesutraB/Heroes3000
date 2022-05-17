@@ -37,7 +37,9 @@ namespace Heroes3000.Models
 		{
 			PrintFighterStatus(this, fighter);
 
-			Random rnd = new Random(Convert.ToInt32(DateTime.Now.Second));
+
+			Random rnd_ = new Random(Convert.ToInt32(DateTime.Now.Second));
+			int rnd = rnd_.Next(0, 100);
 
 			var attack = ReturnAttack(rnd);
 			var defense = ReturnDefense(rnd, attack);
@@ -89,7 +91,7 @@ namespace Heroes3000.Models
 				Environment.Exit(1);
 			}
 
-			Thread.Sleep(rnd.Next(MinDelay, MaxDelay));
+			Thread.Sleep(rnd_.Next(MinDelay, MaxDelay));
 		}
 
 		
@@ -162,13 +164,13 @@ namespace Heroes3000.Models
 
 		#region Attacking
 
-		private static bool MaybeCriticalHit(Random rnd)
+		private static bool MaybeCriticalHit(int rnd)
 		{
 			if (ImFeelingLucky(rnd, CriticalHitChance))
 				return true;
 			return false;
 		}
-		private static void DealDamage(Hero fighter, Attack attack, Random rnd)
+		private static void DealDamage(Hero fighter, Attack attack, int rnd)
 		{
 			if (MaybeCriticalHit(rnd))
 				fighter.CurrentHp -= attack.AttackDamage * 3;
@@ -177,7 +179,7 @@ namespace Heroes3000.Models
 			else
 				fighter.CurrentHp -= attack.AttackDamage;
 		}
-		private Attack ReturnAttack(Random rnd)
+		private Attack ReturnAttack(int rnd)
 		{
 			Attack attack = new Attack("", ActionTypes.None, 0, 0);
 			if (ImFeelingLucky(rnd, 50))
@@ -191,13 +193,13 @@ namespace Heroes3000.Models
 
 		#region Defending
 
-		private static bool MaybeDefendYourself(Random rnd)
+		private static bool MaybeDefendYourself(int rnd)
 		{
 			if (ImFeelingLucky(rnd, DefenseChance))
 				return true;
 			return false;
 		}
-		private Defense ReturnDefense(Random rnd, Attack attack)
+		private Defense ReturnDefense(int rnd, Attack attack)
 		{
 			Defense defense = new Defense("", ActionTypes.None, 0);
 			if (ImFeelingLucky(rnd, 50))
@@ -231,13 +233,9 @@ namespace Heroes3000.Models
 
 			return false;
 		}
-		private static bool ImFeelingLucky(Random rnd, int luckyValue)
+		private static bool ImFeelingLucky(int random, int luckyValue)
 		{
-			return GetChance(rnd) <= luckyValue;
-		}
-		private static int GetChance(Random rnd)
-		{
-			return rnd.Next(0, 100);
+			return random <= luckyValue;
 		}
 		#endregion
 	}
