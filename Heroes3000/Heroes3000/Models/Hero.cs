@@ -93,7 +93,6 @@ namespace Heroes3000.Models
 		}
 
 		
-
 		#region Printing
 
 		private static void PrintFighterStatus(Hero attacker, Hero defender)
