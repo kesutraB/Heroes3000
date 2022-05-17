@@ -4,6 +4,7 @@ namespace Heroes3000.Models
 {
 	public class Defense
 	{
+
 		public string DefenseName { get; protected set; }
 		public ActionTypes Type { get; protected set; }
 		public int DefenseCooldown { get; protected set; }

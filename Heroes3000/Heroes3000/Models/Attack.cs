@@ -4,6 +4,7 @@ namespace Heroes3000.Models
 {
 	public class Attack
 	{
+
 		public string AttackName { get; protected set; }
 		public ActionTypes Type { get; protected set; }
 		public int AttackDamage { get; protected set; }
