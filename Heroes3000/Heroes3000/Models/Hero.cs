@@ -11,17 +11,15 @@ namespace Heroes3000.Models
 		private const int MaxDelay = 500;
 		private const int CriticalHitChance = 2;
 		private const int DefenseChance = 30;
-		private const string Blue = "ConsoleColor.Blue";
-		private const string DarkYellow = "ConsoleColor.DarkYellow";
-		public string FighterName { get; private set; }
-		public FighterClass Class { get; private set; } = FighterClass.None;
-		public FighterHealthState HealthState { get; private set; } = FighterHealthState.None;
-		public Attack PhysicalAttack { get; private set; }
-		public Attack MagicalAttack { get; private set; }
-		public Defense PhysicalDefense { get; private set; }
-		public Defense MagicalDefense { get; private set; }
-		public int CurrentHP { get; private set; }
-		public int MaxHP { get; private set; }
+		public string FighterName { get; protected set; }
+		public FighterClass Class { get; protected set; } = FighterClass.None;
+		public FighterHealthState HealthState { get; protected set; } = FighterHealthState.None;
+		public Attack PhysicalAttack { get; protected set; }
+		public Attack MagicalAttack { get; protected set; }
+		public Defense PhysicalDefense { get; protected set; }
+		public Defense MagicalDefense { get; protected set; }
+		public int CurrentHP { get; protected set; }
+		public int MaxHP { get; protected set; }
 
 		public Hero (string fighterName, FighterClass fighterClass, int maxHp, Attack physicalAttack, Attack magicalAttack, Defense physicalDefense, Defense magicalDefense)
 		{
@@ -42,7 +40,7 @@ namespace Heroes3000.Models
 			Random rnd = new Random(Convert.ToInt32(DateTime.Now.Second));
 
 			Attack attack = ReturnAttack(rnd);
-			Defense defense = ReturnDefense(rnd);
+			Defense defense = ReturnDefense(rnd, attack);
 
 			DealDamage(fighter, attack, rnd);
 
@@ -198,15 +196,16 @@ namespace Heroes3000.Models
 				return true;
 			return false;
 		}
-		private Defense ReturnDefense(Random rnd)
+		private Defense ReturnDefense(Random rnd, Attack attack)
 		{
 			Defense defense = new Defense("", ActionTypes.None, 0);
-			if (ImFeelingLucky(rnd, 50))
+			if (attack == PhysicalAttack)
 				defense = this.PhysicalDefense;
-			else
+			if(attack == MagicalAttack)
 				defense = this.MagicalDefense;
 
 			return defense;
+
 		}
 		#endregion
 
