@@ -18,15 +18,15 @@ namespace Heroes3000.Models
 		public Attack MagicalAttack { get; protected set; }
 		public Defense PhysicalDefense { get; protected set; }
 		public Defense MagicalDefense { get; protected set; }
-		public int CurrentHP { get; protected set; }
-		public int MaxHP { get; protected set; }
+		public int CurrentHp { get; protected set; }
+		public int MaxHp { get; protected set; }
 
 		public Hero (string fighterName, FighterClass fighterClass, int maxHp, Attack physicalAttack, Attack magicalAttack, Defense physicalDefense, Defense magicalDefense)
 		{
 			this.FighterName = fighterName;
 			this.Class = fighterClass;
-			this.MaxHP = maxHp;
-			this.CurrentHP = maxHp;
+			this.MaxHp = maxHp;
+			this.CurrentHp = maxHp;
 			this.PhysicalAttack = physicalAttack;
 			this.MagicalAttack = magicalAttack;
 			this.PhysicalDefense = physicalDefense;
@@ -100,9 +100,9 @@ namespace Heroes3000.Models
 		{
 			Console.ForegroundColor = ConsoleColor.Blue;
 			PrintAttackerName(attacker);
-			Console.WriteLine($" now has {attacker.CurrentHP} / {attacker.MaxHP} HP left.");
+			Console.WriteLine($" now has {attacker.CurrentHp} / {attacker.MaxHp} HP left.");
 			PrintDefenderName(defender);
-			Console.WriteLine($" now has {defender.CurrentHP} / {defender.MaxHP} HP left.");
+			Console.WriteLine($" now has {defender.CurrentHp} / {defender.MaxHp} HP left.");
 			Console.ResetColor();
 		}
 		private static void VictoryMessage (Hero fighter)
@@ -172,11 +172,11 @@ namespace Heroes3000.Models
 		private static void DealDamage(Hero fighter, Attack attack, Random rnd)
 		{
 			if (MaybeCriticalHit(rnd))
-				fighter.CurrentHP -= attack.AttackDamage * 3;
+				fighter.CurrentHp -= attack.AttackDamage * 3;
 			else if (MaybeDefendYourself(rnd))
-				fighter.CurrentHP -= (int)Math.Round(attack.AttackDamage * .35);
+				fighter.CurrentHp -= (int)Math.Round(attack.AttackDamage * .35);
 			else
-				fighter.CurrentHP -= attack.AttackDamage;
+				fighter.CurrentHp -= attack.AttackDamage;
 		}
 		private Attack ReturnAttack(Random rnd)
 		{
@@ -215,12 +215,12 @@ namespace Heroes3000.Models
 
 		private static void KillFighter(Hero fighter)
 		{
-			fighter.CurrentHP = 0;
+			fighter.CurrentHp = 0;
 			fighter.HealthState = FighterHealthState.Dead;
 		}
 		private static bool MaybeKillFighter(Hero fighter)
 		{
-			if (fighter.CurrentHP <= 0)
+			if (fighter.CurrentHp <= 0)
 				return true;
 
 			return false;
