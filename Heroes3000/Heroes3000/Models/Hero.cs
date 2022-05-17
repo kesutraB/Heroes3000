@@ -79,14 +79,14 @@ namespace Heroes3000.Models
 			{
 				DeathMessage(fighter);
 				VictoryMessage(this);
-				return;
+				Environment.Exit(1);
 			}
 			if (IsHeroDead(this))
 			{
 				Console.ResetColor();
 				DeathMessage(this);
 				VictoryMessage(fighter);
-				return;
+				Environment.Exit(1);
 			}
 
 			Thread.Sleep(rnd.Next(MinDelay, MaxDelay));
