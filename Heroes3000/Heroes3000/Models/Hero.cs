@@ -39,8 +39,8 @@ namespace Heroes3000.Models
 
 			Random rnd = new Random(Convert.ToInt32(DateTime.Now.Second));
 
-			Attack attack = ReturnAttack(rnd);
-			Defense defense = ReturnDefense(rnd, attack);
+			var attack = ReturnAttack(rnd);
+			var defense = ReturnDefense(rnd, attack);
 
 			DealDamage(fighter, attack, rnd);
 
@@ -98,11 +98,10 @@ namespace Heroes3000.Models
 
 		private static void PrintFighterStatus(Hero attacker, Hero defender)
 		{
-			PrintAttackerName(attacker);
 			Console.ForegroundColor = ConsoleColor.Blue;
+			PrintAttackerName(attacker);
 			Console.WriteLine($" now has {attacker.CurrentHP} / {attacker.MaxHP} HP left.");
 			PrintDefenderName(defender);
-			Console.ForegroundColor = ConsoleColor.Blue;
 			Console.WriteLine($" now has {defender.CurrentHP} / {defender.MaxHP} HP left.");
 			Console.ResetColor();
 		}
@@ -120,23 +119,21 @@ namespace Heroes3000.Models
 		}
 		private static void AttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
-			PrintAttackerName(attacker);
 			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			PrintAttackerName(attacker);
 			Console.Write(" attacked ");
 			PrintDefenderName(defender);
-			Console.ForegroundColor = ConsoleColor.DarkYellow;
 			Console.Write($" with { attack.AttackName} and decreased his HP by {attack.AttackDamage}.\n");
 			Console.ResetColor();
 		}
 		private static void CriticalAttackMessage(Hero attacker, Hero defender, Attack attack)
 		{
 			Console.ForegroundColor = ConsoleColor.DarkRed;
-			Console.Write($"{attacker.FighterName} scored a critical hit!");
 			PrintAttackerName(attacker);
-			Console.ForegroundColor = ConsoleColor.DarkYellow;
+			Console.Write(" scored a critical hit!\n");
+			PrintAttackerName(attacker);
 			Console.Write(" attacked ");
 			PrintDefenderName(defender);
-			Console.ForegroundColor = ConsoleColor.DarkYellow;
 			Console.Write($" with { attack.AttackName} and decreased his HP by {attack.AttackDamage * 3}.\n");
 			Console.ResetColor();
 		}
@@ -149,13 +146,18 @@ namespace Heroes3000.Models
 		}
 		private static void PrintAttackerName(Hero attacker)
 		{
+			var previousColor = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.Cyan;
 			Console.Write(attacker.FighterName);
+			Console.ForegroundColor = previousColor;
+
 		}
 		private static void PrintDefenderName(Hero defender)
 		{
+			var previousColor = Console.ForegroundColor;
 			Console.ForegroundColor = ConsoleColor.DarkMagenta;
 			Console.Write(defender.FighterName);
+			Console.ForegroundColor = previousColor;
 		}
 		#endregion
 
@@ -199,9 +201,9 @@ namespace Heroes3000.Models
 		private Defense ReturnDefense(Random rnd, Attack attack)
 		{
 			Defense defense = new Defense("", ActionTypes.None, 0);
-			if (attack == PhysicalAttack)
+			if (ImFeelingLucky(rnd, 50))
 				defense = this.PhysicalDefense;
-			if(attack == MagicalAttack)
+			else
 				defense = this.MagicalDefense;
 
 			return defense;
