@@ -37,6 +37,8 @@ namespace Heroes3000
 			fighters.Add(new Hero("Matěj", FighterClass.Fighter, 145, physicalAttacks[2], magicalAttacks[1], physicalDefenses[0], magicalDefenses[0]));
 			fighters.Add(new Hero("Regr", FighterClass.Wizard, 500, physicalAttacks[0], magicalAttacks[2], physicalDefenses[1], magicalDefenses[1]));
 
+			Console.CursorVisible = false;
+
 			Random rnd = new Random(Convert.ToInt32(DateTime.Now.Second));
 			int attacker = 0;
 			int defender = 0;
